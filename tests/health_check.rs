@@ -3,8 +3,8 @@ use std::net::TcpListener;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use uuid::Uuid;
 
-use zero2prod::startup;
 use zero2prod::configuration::{get_configuration, DatabaseSettings};
+use zero2prod::startup;
 
 pub struct TestApp {
     pub address: String,
@@ -14,8 +14,7 @@ pub struct TestApp {
 /// Spin up an instance of our application
 /// and return its address (http://localhost:XXXX)
 async fn spawn_app() -> TestApp {
-    let listener = TcpListener::bind("127.0.0.1:0")
-        .expect("Failed to bind random port");
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
     let port = listener.local_addr().unwrap().port();
     let address = format!("http://127.0.0.1:{}", port);
 
@@ -26,7 +25,7 @@ async fn spawn_app() -> TestApp {
     let server = startup::run(listener, pool.clone()).expect("Failed to bind address");
     let _ = tokio::spawn(server);
 
-    TestApp{ address, pool }
+    TestApp { address, pool }
 }
 
 pub async fn config_db(config: &DatabaseSettings) -> PgPool {
@@ -67,7 +66,6 @@ async fn health_check_works() {
     assert_eq!(Some(0), response.content_length());
 }
 
-
 #[actix_rt::test]
 async fn subscribe_returns_200_for_valid_form_data() {
     // arrange
@@ -104,7 +102,7 @@ async fn subcribe_returns_400_for_missing_data() {
     let test_cases = vec![
         ("name=le%20guin", "missing email"),
         ("email=ursula_le_guin%40gmail.com", "missimg name"),
-        ("", "missing name and email")
+        ("", "missing name and email"),
     ];
 
     for (invalid_body, error_message) in test_cases {
@@ -121,7 +119,8 @@ async fn subcribe_returns_400_for_missing_data() {
         assert_eq!(
             400,
             response.status().as_u16(),
-            "The API did not fail with 400 Bad Request when the payload was {}.", error_message
-            );
+            "The API did not fail with 400 Bad Request when the payload was {}.",
+            error_message
+        );
     }
 }

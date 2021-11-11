@@ -10,7 +10,7 @@ fi
 if ! [ -x "$(command -v sqlx)" ]; then
     echo >&2 "Error: `sqlx` is not installed."
     echo >&2 "Install via:"
-    echo >&2 "  cargo install --version=0.5.9 sql-cli --no-default-features --features postgres"
+    echo >&2 "  cargo install --version=0.5.9 sqlx-cli --no-default-features --features postgres"
     exit 1
 fi
 
